@@ -1,0 +1,36 @@
+#!/usr/bin/env python
+from utils.receiver import ParcelReceiver
+from utils.sender import ParcelSender
+from argparse import ArgumentParser
+from banner.banner_render import show_banner
+
+class Parcel(ParcelSender, ParcelReceiver):
+    def __init__(self) -> None:
+        show_banner()
+
+    def start_send(self, host: str, port: int, file: str):
+        return super().start_send(host, port, file)
+
+    def start_receive(self, host: str, port: int):
+        return super().start_receive(host, port)
+
+parcel = Parcel()
+
+def startparcel():
+    parser = ArgumentParser(prog="")
+    parser.add_argument("--host", type=str, metavar="")
+    parser.add_argument("--file", metavar="", type=str)
+    parser.add_argument("-m", "--mode", metavar="", type=str)
+    parser.add_argument("--connect", type=str, metavar="")
+    parser.add_argument("--pair", metavar="", type=int)
+
+    args = parser.parse_args()
+    
+    match args.mode:
+        case "send":
+            parcel.start_send(args.host, parcel.code, args.file)
+        case "receive":
+            parcel.start_receive(args.connect, args.pair)
+
+if __name__=="__main__":
+    startparcel()
