@@ -3,6 +3,7 @@ from os import path
 from platform import system
 from random import randint
 from .essential import Essential
+import time
 
 pair_code: int = randint(49152,65535)
 
@@ -47,7 +48,12 @@ class ParcelSender(Essential):
                 print(f"\rSending: {progress:.2f}%", end="", flush=True)
         rfile.close()
         csoc.close()
-        print(f"\n\n📦 :Parcel Sended 🛫")
+        com_text="📦 :Parcel Sended 🛫"
+        print("\n")
+        for _ in range(len(com_text)):
+            print(f"\r{com_text[:_+1]}", flush=True, end="")
+            time.sleep(.050)
+        print()
 
     def start_send(self, host: str, port: int, file: str):
         self.host, self.port = host, port

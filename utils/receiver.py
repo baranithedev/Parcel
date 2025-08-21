@@ -2,6 +2,7 @@ from socket import socket, AF_INET, SOCK_STREAM
 from .essential import Essential
 from os import path, mkdir
 from platform import system
+import time
 
 class ParcelReceiver(Essential):
     def connect_to_sender(self):
@@ -35,11 +36,19 @@ class ParcelReceiver(Essential):
                 print(f"\rReceiving: {progress:.2f}%", end="", flush=True)
         wfile.close()
         sock.close()
-        print(f"\n\n🛬 Parcel Received: 📦")
+        com_text="🛬 Parcel Received: 📦"
+        print("\n")
+        for _ in range(len(com_text)):
+            print(f"\r{com_text[:_+1]}", flush=True, end="")
+            time.sleep(.050)
+        print()
 
     def start_receive(self, host:str, port:int):
         self.host, self.port = host, port
-        self.connect_to_sender()
+        try:
+            self.connect_to_sender()
+        except ConnectionRefusedError:
+            print("Invalid Port Number!")
 
     def check_exist(self, parcel_path: str, filename: str):
         slash = "/" if not system().lower() == "windows" else "\\"
